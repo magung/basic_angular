@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Kuliah Online</title>
+    
+    <script src="angular.min.js"></script>
+    <script>
+        var app=angular.module('my_app', []);
+        app.controller('data_controller',
+            function($scope, $http){
+                $http.get("pendidikan.php").then(
+                    function (response) {
+                        $scope.record=response.data.records;
+                    }
+                )
+                
+            }
+        );
+    </script>
+    <style>
+        table, th, td{border: 1px solid grey;border-collapse: collapse;padding: 5px;}
+        table tr:nth-child(odd){background-color: #f1f1f1;}
+        table tr:nth-child(even){background-color: #ffffff;}
+    </style>
+
+</head>
+<body>
+    <div ng-app="my_app" ng-controller="data_controller">
+        <table border=1>
+            <tr>
+                <th>No.</th>
+                <th>Jenis Kelamin</th>
+                <th>TK</th>
+                <th>SD</th>
+                <th>SLTP</th>
+                <th>SLTA</th>
+                <th>D1</th>
+                <th>D2</th>
+                <th>D3</th>
+                <th>S1</th>
+                <th>S2</th>
+                <th>S3</th>
+                <th>Total</th>
+            </tr>
+            <tr ng-repeat="data in record">
+                <td>{{$index+1}}</td>
+                <td>{{data.jenis_kelamin}}</td>
+                <td>{{data.TK}}</td>
+                <td>{{data.SD}}</td>
+                <td>{{data.SLTP}}</td>
+                <td>{{data.SLTA}}</td>
+                <td>{{data.D1}}</td>
+                <td>{{data.D2}}</td>
+                <td>{{data.D3}}</td>
+                <td>{{data.S1}}</td>
+                <td>{{data.S2}}</td>
+                <td>{{data.S3}}</td>
+                <td>{{data.total}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

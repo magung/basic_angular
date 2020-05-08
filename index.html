@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Kuliah Online</title>
+    
+    <script src="angular.min.js"></script>
+    <script>
+        var app=angular.module('my_app', []);
+        app.controller('data_controller',
+            function($scope, $http){
+                $http.get("data.php").then(
+                    function (response) {
+                        $scope.record=response.data.records;
+                    }
+                )
+                $scope.orderByClick=function(x) {$scope.OrderByResult=x;}
+            }
+        );
+        app.filter('alayFormat', function(){
+            return function(x) {
+                var i, c, txt = "";
+                for(i = 0; i < x.length; i++){
+                    c = x[i];
+                    if(i%2==0){
+                        c = c.toUpperCase();
+                    }
+                    txt += c;
+                }
+                return txt;
+            }
+        });
+        app.filter('ddmmyy', function(){
+            return function(x) {
+                var b = "Januari,Februari,Maret,April,Mei,Juni,Juli,Agustus,September,Oktober,November,Desember".split(",");
+                var d = x.substr(8, 2);
+                var m = b[Number(x.substr(5, 2)) - 1];
+                var y = x.substr(0, 4);
+                return d+" "+m+" "+y
+            }
+        });
+    </script>
+    <style>
+        table, th, td{border: 1px solid grey;border-collapse: collapse;padding: 5px;}
+        table tr:nth-child(odd){background-color: #f1f1f1;}
+        table tr:nth-child(even){background-color: #ffffff;}
+    </style>
+
+</head>
+<body>
+    <div ng-app="my_app" ng-controller="data_controller">
+        <table border=1>
+            <tr>
+                <th>No.</th>
+                <th ng-click="orderByClick('nama')">Nama</th>
+                <th ng-click="orderByClick('-tanggal_lahir')">Tanggal Lahir</th>
+                <th>Jenis Kelamin</th>
+                <th>Golongan Darah</th>
+                <th>Agama</th>
+                <th>Pendidikan</th>
+                <th>Pekerjaan</th>
+                <th>Alamat</th>
+                <th>Penghasilan</th>
+            </tr>
+            <tr ng-repeat="data in record | orderBy:OrderByResult">
+                <td>{{$index+1}}</td>
+                <td>{{data.nama | alayFormat}}</td>
+                <td>{{data.tanggal_lahir | ddmmyy }}</td>
+                <td>{{data.jenis_kelamin}}</td>
+                <td>{{data.golongan_darah}}</td>
+                <td>{{data.agama}}</td>
+                <td>{{data.pendidikan}}</td>
+                <td>{{data.pekerjaan}}</td>
+                <td>{{data.alamat}}</td>
+                <td>{{data.penghasilan}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
